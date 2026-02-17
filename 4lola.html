@@ -322,23 +322,15 @@
       });
     }
 
-    // ====== GIFT 2: Spotify embed ======
     const gift2Btn = document.getElementById('gift2Btn');
-    if (gift2Btn){
-      gift2Btn.addEventListener('click', () => {
-        const wrap = document.createElement('div');
-        wrap.className = 'embed-fill';
-        wrap.innerHTML = `
-          <iframe
-            src="https://open.spotify.com/embed/playlist/6VktcashI1GZgaZzQHEx1b?utm_source=generator&theme=0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          ></iframe>
-        `;
-        openModalWith(wrap, 'Gift 2');
-      });
-    }
-
+gift2Btn.addEventListener('click', () => {
+  const wrap = document.createElement('div');
+  wrap.className = 'embed-fill';
+  wrap.innerHTML = `
+    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6VktcashI1GZgaZzQHEx1b?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  `;
+  openModalWith(wrap, 'Gift 2');
+});
     // ====== GIFT 3: Note ======
     const gift3Btn = document.getElementById('gift3Btn');
     if (gift3Btn){
