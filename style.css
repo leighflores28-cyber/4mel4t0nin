@@ -1,0 +1,246 @@
+/* ================= THEME ================= */
+:root{
+    --mauve: #9b7aa5;
+    --mauve-700:#7f6389;
+    --pink: #f7c6d0;
+    --pink-soft:#fde8ee;
+    --ink: #2a2330;
+    --muted:#6c5f74;
+    --ring: rgba(155,122,165,.28);
+    --pastel-yellow:#FFEBA1; /* pastel yellow for "haii" */
+  }
+  
+  /* ================ BASE ================== */
+  *{ box-sizing: border-box; }
+  html, body{
+    height: 90%;
+    margin: 0;
+    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    background-image: url('/gif/snoop.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  /* ===== Background: Snoopy image + soft overlays =====
+     Put your image at assets/snoopy.jpg (change to .png if needed) */
+  .pastel-bg{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  
+    /* Top layers first, image last */
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,0.58), rgba(255,255,255,0.58)), /* soft white wash for readability */
+      radial-gradient(900px 600px at 85% 20%, rgba(247,198,208,.32), transparent 50%), /* pink glow */
+      radial-gradient(1200px 700px at 15% 10%, rgba(155,122,165,.16), transparent 45%), /* mauve glow */
+      url('assets/snoopy.jpg'); 
+    background-size: cover, 100% 100%, 100% 100%, cover;
+    background-position: center, center, center, center;
+    
+  
+    /* gentle tuning so text stays clear */
+    filter: saturate(0.98) contrast(0.98) brightness(1.02);
+  }
+  
+  /* ================= MODAL ================= */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(42,35,48,0.22);   /* dim backdrop */
+    z-index: 5;
+  }
+  
+  .modal-card{
+    width: min(92vw, 720px);
+    padding: clamp(28px, 6vw, 56px);
+    border-radius: 28px;
+    text-align: center;
+    position: relative;
+    z-index: 6;
+  
+    /* Translucent / frosted look */
+    background: rgba(255, 255, 255, 0.64);
+   
+    backdrop-filter: blur(0px) saturate(1);
+    -webkit-backdrop-filter: blur(3px) saturate(10);
+    box-shadow:
+      0 16px 48px rgba(42,35,48,0.20),
+      0 2px 0 rgba(255,255,255,0.82) inset;
+  
+    /* entry animation */
+    transform: translateY(14px) scale(.98);
+    opacity: 0;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease;
+  }
+  .modal-overlay.show .modal-card{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  
+  /* Optional corner glow */
+  .modal-card::before,.modal-card::after{
+    content:'';
+    position:absolute;
+    width:140px;height:140px;
+    filter: blur(10px);
+    pointer-events:none;
+    opacity:.42;
+  }
+  .modal-card::before{
+    top:-24px; left:-24px;
+    background: radial-gradient(closest-side, rgba(253,232,238,0.9), transparent 70%);
+  }
+  .modal-card::after{
+    bottom:-24px; right:-24px;
+    background: radial-gradient(closest-side, rgba(206,179,215,0.9), transparent 70%);
+  }
+  
+  /* Close X */
+  .close-x{
+    position:absolute; top:10px; right:14px;
+    width:36px; height:36px; border:none; border-radius:50%;
+    background:transparent; color:var(--mauve-700);
+    font-size:24px; line-height:36px; cursor:pointer;
+  }
+  .close-x:hover{ background: var(--pink-soft); }
+  
+  /* =============== TITLE (one line) =============== */
+  /* =============== TITLE (one line) =============== */
+.title{
+    margin: 0 0 10px;
+    display: inline-flex;
+    align-items: baseline;  /* keep baseline alignment */
+    gap: .5ch;
+    white-space: nowrap;    /* force one line */
+    overflow: hidden;
+  }
+  
+  /* "haii" same size AND same color as "Sammy!" */
+  .title .hello{
+    font-weight: 800;
+    font-size: clamp(32px, 7vw, 56px);  /* match .name size */
+    letter-spacing: .3px;
+    color: var(--mauve);                /* match Sammy’s color */
+  }
+  
+  /* Script name (unchanged) */
+  .title .name{
+    font-family: 'Pacifico', cursive;
+    color: var(--mauve);
+    font-size: clamp(32px, 7vw, 56px);
+    letter-spacing: .2px;
+  }
+  
+  /* Face is split so we can nudge parts independently */
+  .title .face{
+    font-weight: 800;
+    color: var(--mauve);
+    font-size: clamp(28px, 6.2vw, 48px); /* a touch smaller is cute */
+    line-height: 1;
+    display: inline-flex;
+    gap: 0.1ch;
+  }
+  
+  /* Raise the carets slightly */
+  .title .face .caret{
+    position: relative;
+    top: -0.22em;  /* move up (adjust between -0.18em to -0.28em to taste) */
+  }
+  
+  /* Lower the underscores slightly */
+  .title .face .unders{
+    position: relative;
+    top: 0.16em;   /* move down (increase to lower more) */
+    display: inline-block;
+    letter-spacing: -0.02em; /* keeps the two underscores closer */
+  }
+  /* Subtitle */
+  .subtitle{
+    margin: 8px 0 26px;
+    color: rgba(44,38,51,0.78);
+    font-weight: 300;
+    font-size: clamp(12px, 2.8vw, 16px);
+  }
+  
+  /* =============== BUTTONS (same row, centered) =============== */
+  .btn-row{
+    display: inline-flex;          /* keep in one row */
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: nowrap;
+  }
+  
+  .btn{
+    appearance: none;
+    white-space: nowrap;
+    position: relative;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-weight: 800;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 2px solid var(--mauve);
+    transition: transform 220ms ease, box-shadow 220ms ease,
+                background 200ms ease, color 200ms ease, border-color 200ms ease,
+                opacity 220ms ease, filter 220ms ease;
+  }
+  
+  /* YES: grows + wiggles (scale controlled by JS) */
+  .btn-primary{
+    --grow-scale: 1;                     /* JS increases this value */
+    transform-origin: center;
+    transform: scale(var(--grow-scale));
+    background: linear-gradient(135deg, var(--pink) 0%, var(--mauve) 100%);
+    color:#fff;
+    border-color: var(--mauve);
+    box-shadow: 0 12px 26px var(--ring);
+  }
+  .btn-primary:hover{
+    transform: scale(calc(var(--grow-scale) * 1.02)) translateY(-1px);
+  }
+  
+  /* NO: outline; visibility gets managed by JS (fade/shrink/hide) */
+  .btn-outline{
+    background: rgba(255,255,255,0.88);
+    color: var(--mauve);
+    border: 2px solid var(--mauve);
+  }
+  .btn-outline:hover{
+    background: var(--pink-soft);
+    box-shadow: 0 10px 24px var(--ring);
+    transform: translateY(-1px);
+  }
+  
+  /* Wiggle animation that respects current growth scale */
+  @keyframes wiggle-with-scale {
+    0%   { transform: scale(var(--grow-scale)) translateX(0) rotate(0deg); }
+    15%  { transform: scale(var(--grow-scale)) translateX(-4px) rotate(-1.2deg); }
+    30%  { transform: scale(var(--grow-scale)) translateX(4px)  rotate(1.2deg); }
+    45%  { transform: scale(var(--grow-scale)) translateX(-3px) rotate(-0.8deg); }
+    60%  { transform: scale(var(--grow-scale)) translateX(3px)  rotate(0.8deg); }
+    75%  { transform: scale(var(--grow-scale)) translateX(-2px) rotate(-0.4deg); }
+    100% { transform: scale(var(--grow-scale)) translateX(0)   rotate(0deg); }
+  }
+  .btn-primary.shake{
+    animation: wiggle-with-scale 520ms ease-in-out 1;
+  }
+  
+  /* Optional glow pulse while shaking */
+  @keyframes gentle-pulse {
+    0%   { box-shadow: 0 12px 26px var(--ring); }
+    50%  { box-shadow: 0 18px 38px var(--ring); }
+    100% { box-shadow: 0 12px 26px var(--ring); }
+  }
+  .btn-primary.pulse{ animation: gentle-pulse 800ms ease-in-out 1; }
+  
+  /* Small devices: keep same-row layout but reduce padding if needed */
+  @media (max-width: 380px){
+    .btn-row{ gap: 10px; }
+    .btn{ padding: 12px 18px; font-size: 14px; }
+  }

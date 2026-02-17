@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Gift 💝</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      /* Theme */
+      --mauve: #9b7aa5;
+      --mauve-700:#7f6389;
+      --pink: #f7c6d0;
+      --pink-soft:#fde8ee;
+      --ink: #2a2330;
+      --ring: rgba(155,122,165,.28);
+      --card: #ffffff;
+
+      /* Gradient (mauve → pastel pink) */
+      --grad-hello: linear-gradient(135deg, var(--mauve) 0%, #b88bc3 40%, var(--pink) 100%);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; }
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+
+      font-family: 'Poppins', system-ui, sans-serif;
+      color: var(--ink);
+
+      background-image:
+        radial-gradient(1100px 700px at 15% 10%, rgba(155,122,165,.18), transparent 45%),
+        radial-gradient(900px 600px at 85% 20%, rgba(247,198,208,.35), transparent 50%),
+        url('img/tulips.jpg');
+        
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    /* Main card */
+    .wrap{
+      width:min(92vw, 820px);
+      background: var(--card);
+      border-radius:28px;
+      padding:clamp(28px, 6vw, 56px);
+      text-align:center;
+      box-shadow:0 22px 52px rgba(42,35,48,.18);
+      border:1px solid #f2e9f7;
+      position:relative; /* needed for bottom-right button positioning */
+    }
+
+    /* Title: gradient text */
+    h1{
+      margin:0 0 12px;
+      font-family:'Pacifico', cursive;
+      font-size:clamp(34px, 7vw, 58px);
+      letter-spacing:.3px;
+      background: var(--grad-hello);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+    p{ margin:8px 0 0; line-height:1.7; font-weight:300; }
+
+    /* Gallery grid — force exactly 3 columns */
+    .gallery{
+      margin:26px auto 6px;
+      display:grid;
+      gap:14px;
+      grid-template-columns: repeat(3, 1fr); /* <-- exactly 3 boxes per row */
+    }
+
+    /* Tiles as clickable buttons and center content fully */
+    .tile{
+      appearance:none; border:none; cursor:pointer;
+      border-radius:16px;
+      border:1px solid #f2e9f7;
+      background: linear-gradient(135deg, var(--pink-soft), #fff);
+      color:#8b6f95;
+      font-weight:800;
+      text-align:center;
+      min-height:120px;
+      position:relative;
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+
+      /* Center the label perfectly */
+      display:flex; align-items:center; justify-content:center;
+      padding:0 12px;
+      font-size:1.05rem;
+    }
+
+    /* Gradient stroke effect on first line inside tiles */
+    .tile::first-line{
+      background: var(--grad-hello);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .tile:hover, .tile:focus{
+      transform: translateY(-2px);
+      box-shadow:0 12px 28px rgba(155,122,165,.22);
+      outline:none;
+      background: var(--grad-hello);
+      color:#fff;
+    }
+
+    /* Back button (gradient pill) */
+    .back-btn{
+      display:inline-block; margin-top:22px; padding:12px 22px; border-radius:999px;
+      background: var(--grad-hello);
+      color:#fff; text-decoration:none; font-weight:800; letter-spacing:.6px;
+      box-shadow:0 12px 26px var(--ring);
+      text-transform: uppercase;
+    }
+    .back-btn:hover{ filter:brightness(.96); }
+
+    /* Bottom-right "D End" button (inside the white card) */
+    .end-btn{
+      position: absolute;
+      right: clamp(18px, 4vw, 28px);
+      bottom: clamp(18px, 4vw, 28px);
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid #f2e9f7;
+      background: var(--grad-hello);
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      box-shadow: 0 12px 26px var(--ring);
+      cursor: pointer;
+    }
+    .end-btn:hover{ filter: brightness(.96); }
+
+    /* Center modal (reusable) */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background: rgba(42,35,48,.28);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index: 50;
+      padding: 20px;
+    }
+    .modal-backdrop.show{ display:flex; }
+
+    .modal-card{
+      width:min(92vw, 760px);
+      background:#fffffff7;
+      border:1px solid #f2e9f7;
+      border-radius: 22px;
+      box-shadow: 0 24px 56px rgba(42,35,48,.24);
+      backdrop-filter: blur(10px) saturate(1.02);
+      -webkit-backdrop-filter: blur(10px) saturate(1.02);
+      transform: translateY(14px) scale(.98);
+      opacity:0;
+      transition: transform .28s cubic-bezier(.2,.8,.2,1), opacity .28s ease;
+      overflow:hidden;
+      max-height: 92vh;
+    }
+    .modal-backdrop.show .modal-card{
+      transform: translateY(0) scale(1);
+      opacity:1;
+    }
+
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 18px; border-bottom:1px solid #f2e9f7;
+    }
+    .modal-title{
+      margin:0; font-weight:800;
+      background: var(--grad-hello);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .modal-close{
+      width:36px; height:36px; border-radius:50%;
+      border:none; background:transparent; color:var(--mauve-700);
+      font-size:20px; cursor:pointer;
+    }
+    .modal-close:hover{ background:var(--pink-soft); }
+
+    .modal-body{
+      padding:18px;
+      display:flex;
+      flex-direction: column;
+      gap: 0;
+      min-height: 480px;
+      max-height: calc(90vh - 120px);
+    }
+
+    .embed-16x9{
+      position:relative; width:100%;
+      padding-top:56.25%; /* 16:9 */
+      border-radius:12px; overflow:hidden;
+      background:#000; border:1px solid #f2e9f7;
+      flex: 1 1 auto;
+    }
+    .embed-16x9 video{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:contain;
+      background:#000;
+    }
+
+    .embed-fill{
+      position: relative;
+      flex: 1 1 auto;
+      width: 100%;
+      min-height: 380px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #f2e9f7;
+      background: #121212;
+      box-shadow: 0 18px 40px rgba(42,35,48,.12);
+    }
+    .embed-fill iframe{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+
+    .note{
+      text-align:left; line-height:1.7; font-weight:400; color:#5f5568; white-space:pre-wrap;
+      flex: 1 1 auto;
+    }
+
+    /* Optional: make it stack nicely on very narrow screens */
+    @media (max-width: 540px){
+      .gallery{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>For You, Lola 💗</h1>
+    <p>I made this with love—hope it makes you smile!</p>
+
+    <div class="gallery">
+      <!-- Centered labels -->
+      <button class="tile" id="gift1Btn" aria-haspopup="dialog">1st Gift</button>
+      <button class="tile" id="gift2Btn" aria-haspopup="dialog">2nd Gift</button>
+      <button class="tile" id="gift3Btn" aria-haspopup="dialog">3rd Gift</button>
+    </div>
+
+    <a class="back-btn" href="index.html">Back</a>
+
+    <!-- D End button pinned to bottom-right of the white box -->
+    <button class="end-btn" id="endBtn" aria-haspopup="dialog">D End</button>
+  </div>
+
+  <!-- Reusable center modal -->
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card" role="document">
+      <div class="modal-head">
+        <h3 class="modal-title" id="modalTitle">Title</h3>
+        <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"><!-- content injected here --></div>
+    </div>
+  </div>
+
+  <script>
+    // Modal helpers
+    const modal      = document.getElementById('modal');
+    const modalBody  = document.getElementById('modalBody');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalClose = document.getElementById('modalClose');
+
+    function openModalWith(node, titleText){
+      modalBody.innerHTML = '';
+      if (node) modalBody.appendChild(node);
+      modalTitle.textContent = titleText || '';
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      modalClose.focus();
+    }
+    function closeModal(){
+      const vid = modalBody.querySelector('video');
+      if (vid) { vid.pause(); }
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      modalBody.innerHTML = '';
+    }
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.classList.contains('show')) closeModal(); });
+
+    // ====== GIFT 1: Example video ======
+    const gift1Btn = document.getElementById('gift1Btn');
+    gift1Btn.addEventListener('click', () => {
+      const wrap = document.createElement('div');
+      wrap.className = 'embed-16x9';
+      const video = document.createElement('video');
+      video.setAttribute('controls', 'controls');
+      video.setAttribute('preload', 'metadata');
+      video.setAttribute('playsinline', '');
+      const sourceMp4 = document.createElement('source');
+      sourceMp4.src  = 'video/sem.mp4';       // <- change to your actual path
+      sourceMp4.type = 'video/mp4';
+      video.appendChild(sourceMp4);
+      video.append('Sorry, your browser doesn’t support embedded videos.');
+      wrap.appendChild(video);
+      openModalWith(wrap, 'Gift 1');
+    });
+
+    // ====== GIFT 2: Example playlist embed ======
+    const gift2Btn = document.getElementById('gift2Btn');
+    gift2Btn.addEventListener('click', () => {
+      const wrap = document.createElement('div');
+      wrap.className = 'embed-fill';
+      wrap.innerHTML = `
+        <iframe
+          src="https://open.spotify.com/embed/playlist/6VktcashI1GZgaZzQHEx1b?utm_source=generator&theme=0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      `;
+      openModalWith(wrap, 'Gift 2');
+    });
+
+    // ====== GIFT 3: Example note ======
+    const gift3Btn = document.getElementById('gift3Btn');
+    gift3Btn.addEventListener('click', () => {
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent =
+`Hi, Sampot! ♡
+
+    I hope you’re doing well, wherever you are right now. I’ve been trying to go on with my days as usual, but there are quiet moments when I really feel your absence. It’s strange how someone’s presence can become such a natural part of your life, and when they’re not around, everything feels a little different — a little emptier.
+
+
+    I miss your voice, your kwento,mga rant mo,  your laugh… even the small things I never thought I’d notice. I guess missing someone isn’t loud; it’s that soft ache that shows up when you least expect it. And lately, I’ve been feeling it more than I’d like to admit.
+I’m not writing this to make you feel obliged or guilty. I just wanted to say na I MISS YOU SO SO MUCH. More than I thought I would, and more than words can fully express.`;
+      openModalWith(note, 'Gift 3');
+    });
+
+    // ====== D END: Tooltip on hover + Modal on click ======
+    const endBtn = document.getElementById('endBtn');
+
+    // Show native tooltip when cursor points at the button
+    endBtn.setAttribute('title', 'thank you sa time mo hehe ^__^');
+
+    // On click, open the modal with the thank-you message
+    endBtn.addEventListener('click', () => {
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = 'thank you sa time mo hehe ^__^';
+      openModalWith(note, 'D End');
+    });
+  </script>
+</body>
+</html>
