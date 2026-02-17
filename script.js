@@ -1,4 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+
+document.getElementById('yesBtn').addEventListener('click', () => {
+  window.location.href = '4lola.html';
+});
+
   const yesBtn  = document.getElementById('yesBtn');
   const noBtn   = document.getElementById('noBtn');
   const overlay = document.getElementById('overlay');
@@ -86,4 +90,3 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-});
